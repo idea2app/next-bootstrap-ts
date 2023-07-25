@@ -9,6 +9,7 @@ jobs:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_DO_EXPORT: ${{ secrets.VERCEL_DO_EXPORT }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -30,7 +31,7 @@ jobs:
         run: pnpm i --frozen-lockfile
 
       - name: Export Static pages
-        if: ${{ !env.VERCEL_TOKEN || !env.VERCEL_ORG_ID || !env.VERCEL_PROJECT_ID }}
+        if: ${{ env.VERCEL_DO_EXPORT && (!env.VERCEL_TOKEN || !env.VERCEL_ORG_ID || !env.VERCEL_PROJECT_ID) }}
         run: pnpm export
 
       - name: Deploy to GitHub pages
